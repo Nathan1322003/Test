@@ -1,76 +1,91 @@
 <template>
-    <h1 class=" text-5xl text-center mt-12">Matrix Rechner!</h1>
-    <button v-on:click="A_spalten_adder" class=" bg-amber-400 h-10 w-10 mt-12 ml">+
-        </button>
-        <button v-on:click="A_spalten_remover" class=" bg-amber-400 h-10 w-10">-
-        </button>
-    <div class="flex justify-around ">
-        <!--MATRIX A-->
+    <h1 class=" text-5xl text-center m-12">Matrix Rechner!</h1>
 
-        <h2 class=" mt-32">Matrix A</h2>
-        <button v-on:click="A_zeilen_adder" class=" bg-amber-800 h-10 w-10">+
-        </button>
-        <button v-on:click="A_zeilen_remover" class=" bg-amber-800 h-10 w-10">-
-        </button>
-        <div>
-            <table>
-                <tr v-for="(zeile,i) in A_matrix" :key="i">
-                    <td v-for="(value, j) in zeile" :key="j">
-                        <input type=""
-                        v-model.number = A_matrix[i][j]
-                        class=" bg-gray-300 w-12 text-center ml-2 mr-2 mb-1 border-black border-1">
-                    </td>
-                </tr>
-            </table>
-        </div>
-        
-    
+        <div class="flex justify-around w-full ">
+            <div class=" ml-6 inline-block p-10 bg-white shadow-2xl rounded-xl border-1 border-gray-400"> 
+                <div class="flex flex-col items-center">
+                    <h2 class=" mb-4 mt-4 text-lg">Matrix A</h2>
+                    <div class="ml-1 mb-4">
+                        <button v-on:click="A_spalten_adder" 
+                        class=" rounded bg-gray-900 h-10 w-10 text-white">+
+                        </button>
+                        <button v-on:click="A_spalten_remover" 
+                        class="rounded bg-gray-900 h-10 w-10 text-white ml-1">-
+                        </button>
+                        <button v-on:click="A_zeilen_adder" 
+                        class="rounded bg-gray-900 h-10 w-10 text-white ml-4">+
+                        </button>
+                        <button v-on:click="A_zeilen_remover" 
+                        class="rounded bg-gray-900 h-10 w-10 text-white ml-1">-
+                        </button>
+                    </div>
+                </div>
+                
+                <!--Matrix A-->
+                <table>
+                    <tr v-for="(zeile,i) in A_matrix" :key="i">
+                        <td v-for="(value, j) in zeile" :key="j">
+                            <input type=""
+                            v-model.number = A_matrix[i][j]
+                            class=" bg-gray-300 w-12 text-center ml-2 mr-2 mb-1 border-black border-1">
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-        
-        <!--MATRIX B-->
-        <h2 class=" mt-32">Matrix B</h2>
-        <button v-on:click="B_spalten_adder" class=" bg-amber-400 h-10 w-10">+
-        </button>
-        <button v-on:click="B_spalten_remover" class=" bg-amber-400 h-10 w-10">-
-        </button>
-        <div>
-            <table>
-                <tr v-for="(zeile,i) in B_matrix" :key="i">
-                    <td v-for="(value, j) in zeile" :key="j">
-                        <input type=""
-                        v-model.number = B_matrix[i][j]
-                        class=" bg-red-500 w-8 rounded text-center m-1">
-                    </td>
-                </tr>
-            </table>
+            <!--Multiplikation-->
+
+            <button v-on:click="update_C_matrix" class=" bg-green-800 h-10 w-30 text-center">A * B
+            </button>
+            
+            <!--MATRIX B-->
+            <div class=" ml-6 inline-block p-10 bg-white shadow-2xl rounded-xl border-1 border-gray-400 mr-4"> 
+                <div class="flex flex-col items-center">
+                    <h2 class=" mb-4 mt-4 text-lg">Matrix B</h2>
+                    <div class="flex justify-end mr-4 mb-4">
+                        <button v-on:click="B_spalten_adder" 
+                        class="rounded bg-gray-900 h-10 w-10 text-white">+
+                        </button>
+                        <button v-on:click="B_spalten_remover" 
+                        class=" rounded bg-gray-900 h-10 w-10 text-white ml-1">-
+                        </button>
+                        <button v-on:click="B_zeilen_adder" 
+                        class="rounded bg-gray-900 h-10 w-10 text-white ml-4">+
+                        </button>
+                        <button v-on:click="B_zeilen_remover" 
+                        class="rounded bg-gray-900 h-10 w-10 text-white ml-1">-
+                        </button>
+                </div>
+                </div>
+                
+                <table>
+                    <tr v-for="(zeile,i) in B_matrix" :key="i">
+                        <td v-for="(value, j) in zeile" :key="j">
+                            <input type=""
+                            v-model.number = B_matrix[i][j]
+                            class=" bg-gray-300 w-12 text-center ml-2 mr-2 mb-1 border-black border-1">
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        
-        <button v-on:click="B_zeilen_adder" class=" bg-amber-800 h-10 w-10">+
-        </button>
-        <button v-on:click="B_zeilen_remover" class=" bg-amber-800 h-10 w-10">-
-        </button>
-    </div>
-    <button v-on:click="update_C_matrix" class=" bg-green-800 h-10 w-30 text-center">UPDATE
-        </button>
-    
-    
-    {{ C_matrix }}
     <p v-if="falsche_dim">ERROR</p>
+   
     </template>
 
 <script setup lang="ts">
     import { ref, watch } from 'vue'
     const falsche_dim = ref(false)
-    const A_anzahl_spalten = ref(2)
-    const A_anzahl_zeilen = ref(2)
+    const A_anzahl_spalten = ref(3)
+    const A_anzahl_zeilen = ref(3)
     const A_matrix = ref<number[][]>(
         Array.from({ length: A_anzahl_zeilen.value }, () =>
         Array.from({ length: A_anzahl_spalten.value }, () => 0)
         ))
 
 
-    const B_anzahl_spalten = ref(2)
-    const B_anzahl_zeilen = ref(2)
+    const B_anzahl_spalten = ref(3)
+    const B_anzahl_zeilen = ref(3)
     const B_matrix = ref<number[][]>(
         Array.from({ length: B_anzahl_zeilen.value }, () =>
         Array.from({ length: B_anzahl_spalten.value }, () => 0)
